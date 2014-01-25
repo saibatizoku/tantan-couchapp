@@ -65,35 +65,26 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             "": "goHome",
             "home": "goHome",
             "granjas(/:gid)": "goHome",
-            "editar/granjas/:gid/estanques(/:eid)": "goEditEstanxs",
-            "editar/granjas(/:gid)": "goEditGranjas",
             "granjas/:gid/estanques(/:eid)": "goHome",
-            //"borrar/granjas/:gid/estanques/:eid": "goDeleteEstanxs",
             "usuarios(/:uid)": "goUsers"
         },
         initialize: function () {
-            this.listenTo(App.vent, 'go:home', function (gid, eid) {
-                if ((gid) && (eid)) {
-                    this.navigate('granjas/'+gid+'/estanques/'+eid, {trigger: true});
-                } else if (gid) {
-                    this.navigate('granjas/'+gid, {trigger: true});
-                } else {
-                    this.navigate('granjas', {trigger: true});
-                }
-            });
+            this.listenTo(App.vent, 'go:home', this.navigateHome);
+        },
+        navigateHome: function (gid, eid) {
+            if ((gid) && (eid)) {
+                this.navigate('granjas/'+gid+'/estanques/'+eid, {trigger: true});
+            } else if (gid) {
+                this.navigate('granjas/'+gid, {trigger: true});
+            } else {
+                this.navigate('granjas', {trigger: true});
+            }
         }
     });
 
     Granjas.Control = Marionette.Controller.extend({
         initialize: function () {
-            var controller = this;
-            var gcol = new Granjas.GranjaCol();
-            gcol.on('add', function (model, collection, options) {
-                console.log('loading granja', model, collection, options);
-                model.nodos = controller.getEstanques(model.id);
-            });
-            this.gcol = gcol;
-            gcol.fetch();
+            this.getGranjas();
         },
         initApp: function (opts) {
             var controller = this;
@@ -114,6 +105,22 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
                 success: showApp,
                 error: controller.showLoggedOut
             });
+        },
+        getGranjas: function (gid) {
+            var controller = this;
+            var gcol;
+            if (gid) {
+                gcol = new Granjas.AllDocs();
+                gcol.fetch({key: gid});
+            } else {
+                gcol = new Granjas.GranjaCol();
+                gcol.fetch();
+            }
+            gcol.on('add', function (model, collection, options) {
+                console.log('loading granja', model, collection, options);
+                model.nodos = controller.getEstanques(model.id);
+            });
+            this.gcol = gcol;
         },
         getEstanques: function (gid) {
             var ecol = new Granjas.EstanquesCol();
@@ -148,191 +155,6 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             App.subnav.close();
             App.main.close();
         },
-        saveGranjaEvents: function (view) {
-            this.listenTo(view, "save:form", function (args) {
-                console.log('controller Saving Granja', args);
-                if (args.model.isNew()) {
-                    this.goEditGranjas();
-                } else {
-                    this.gcol.add(args.model);
-                    this.goEditGranjas(args.model.id);
-                }
-            });
-            this.listenTo(view, "reset:form", function (args) {
-                console.log('controller Cancelling GranjaEdit', args);
-                if (args.model.isNew()) {
-                    this.goHome();
-                } else {
-                    this.goHome(args.model.id);
-                }
-            });
-        },
-        goEditGranjas: function (gid) {
-            var controller = this;
-            var opts = {};
-            function showMain (user) {
-                console.log('goEditGranjas showMain', gid, user);
-                if (user.is_admin()) {
-                    console.log('goEdit has ADMIN');
-                    var granjas = controller.gcol;
-                    App.side.show(new Granjas.GranjasList({collection: granjas}));
-                    if (gid) {
-                        if (granjas.get(gid)) {
-                            var mod = granjas.get(gid);
-                            console.log('model', mod);
-                            var estx = mod.nodos;
-                            console.log('estx', estx);
-                            //var docvw = new Granjas.GranjaDocView({model: mod});
-                            //docvw.render();
-                            //App.main.show(docvw);
-                            App.header.show(new Granjas.GranjaMain({model: mod}));
-                            App.subnav.close();
-                            App.tools.show(new Granjas.GranjaTools({model: mod}));
-                            App.main.show(new Granjas.GranjaEditForm({model: mod}));
-                            controller.saveGranjaEvents(App.main.currentView);
-                        }
-                    } else {
-                        console.log('granja nueva');
-                        App.header.close();
-                        App.subnav.close();
-                        App.tools.close();
-                        App.main.show(new Granjas.GranjaEditForm({model: new Granjas.GranjaDoc()}));
-                        controller.saveGranjaEvents(App.main.currentView);
-                    }
-                }
-            }
-            opts.success = showMain;
-            this.initApp(opts);
-        },
-        goDeleteEstanxs: function (gid, eid) {
-            var controller = this;
-            var opts = {};
-            function showMain (user) {
-                console.log('goDeleteEstanxs showMain', gid, user);
-                if (user.is_admin()) {
-                    console.log('goDeleteEstanxs has ADMIN');
-                    var granjas = controller.gcol;
-                    if ((gid) && (granjas.get(gid))) {
-                        App.side.show(new Granjas.GranjasList({collection: granjas}));
-                        var mod = granjas.get(gid);
-                        console.log('model', mod);
-                        var estx = mod.nodos;
-                        console.log('estx', estx);
-                        App.header.show(new Granjas.GranjaMain({model: mod}));
-                        App.subnav.close();
-                        App.tools.show(new Granjas.GranjaTools({model: mod}));
-                        var emod = new Granjas.EstanqueDoc();
-                        if ((eid) && (estx.get(eid))) {
-                            console.log('estk', estx.get(eid));
-                            emod = estx.get(eid);
-                        }
-                        var gef = new Granjas.EstanqueEditForm({
-                            model: emod
-                        });
-                        controller.listenTo(gef, "save:form", function (args) {
-                            console.log('controller Saving Estanque', args);
-                            console.log('controller Saving Estanque GRANJA', mod);
-                            var form_data = args.view.$el.serializeJSON();
-                            args.model.set(form_data);
-                            estx.add(args.model, {merge: true});
-                            console.log('controller Saving ESTANQUEX', args.model.toJSON());
-                            if (args.model.isNew()) {
-                                args.model.set('granja_id', gid);
-                                args.model.save();
-                                estx.fetch({key: [gid,1]});
-                                granjas.fetch();
-                                App.vent.trigger('go:home', gid);
-                            } else {
-                                args.model.save();
-                                App.vent.trigger('go:home', gid, args.model.id);
-                            }
-                            //controller.goEditEstanxs(gid, args.model.id);
-                            //controller.goHome(gid, args.model.id);
-                        });
-                        controller.listenTo(gef, "reset:form", function (args) {
-                            console.log('controller Cancelling EstanqueEdit', args);
-                            if (args.model.isNew()) {
-                                controller.goHome(gid);
-                                App.vent.trigger('go:home', gid);
-                            } else {
-                                controller.goHome(gid, args.model.id);
-                                App.vent.trigger('go:home', gid, args.model.id);
-                            }
-                        });
-                        App.main.show(gef);
-                    } else {
-                        console.log('granja nueva');
-                    }
-                }
-            }
-            opts.success = showMain;
-            this.initApp(opts);
-        },
-        goEditEstanxs: function (gid, eid) {
-            var controller = this;
-            var opts = {};
-            function showMain (user) {
-                console.log('goEditEstanxs showMain', gid, user);
-                if (user.is_admin()) {
-                    console.log('goEditEstanxs has ADMIN');
-                    var granjas = controller.gcol;
-                    if ((gid) && (granjas.get(gid))) {
-                        App.side.show(new Granjas.GranjasList({collection: granjas}));
-                        var mod = granjas.get(gid);
-                        console.log('model', mod);
-                        var estx = mod.nodos;
-                        console.log('estx', estx);
-                        App.header.show(new Granjas.GranjaMain({model: mod}));
-                        App.subnav.close();
-                        App.tools.show(new Granjas.GranjaTools({model: mod}));
-                        var emod = new Granjas.EstanqueDoc();
-                        if ((eid) && (estx.get(eid))) {
-                            console.log('estk', estx.get(eid));
-                            emod = estx.get(eid);
-                        }
-                        var gef = new Granjas.EstanqueEditForm({
-                            model: emod
-                        });
-                        controller.listenTo(gef, "save:form", function (args) {
-                            console.log('controller Saving Estanque', args);
-                            console.log('controller Saving Estanque GRANJA', mod);
-                            var form_data = args.view.$el.serializeJSON();
-                            args.model.set(form_data);
-                            args.model.set('granja_id', gid);
-                            var eX = new Granjas.EstanquesCol();
-                            console.log('controller Saving ESTANQUEX', args.model.toJSON());
-                            if (args.model.isNew()) {
-                                eX.create(args.model);
-                                //args.model.save();
-                                //estx.fetch({key: [gid,1]});
-                                App.vent.trigger('go:home', gid);
-                                //granjas.fetch();
-                            } else {
-                                args.model.save();
-                                App.vent.trigger('go:home', gid, args.model.id);
-                            }
-                            //controller.goEditEstanxs(gid, args.model.id);
-                            //controller.goHome(gid, args.model.id);
-                        });
-                        controller.listenTo(gef, "reset:form", function (args) {
-                            console.log('controller Cancelling EstanqueEdit', args);
-                            if (args.model.isNew()) {
-                                controller.goHome(gid);
-                                App.vent.trigger('go:home', gid);
-                            } else {
-                                controller.goHome(gid, args.model.id);
-                                App.vent.trigger('go:home', gid, args.model.id);
-                            }
-                        });
-                        App.main.show(gef);
-                    } else {
-                        console.log('granja nueva');
-                    }
-                }
-            }
-            opts.success = showMain;
-            this.initApp(opts);
-        },
         goHome: function (gid, eid) {
             var controller = this;
             var opts = {};
@@ -340,9 +162,10 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
                 console.log('goHome showMain', gid, user);
                 if (user.is_admin()) {
                     console.log('goHome has ADMIN');
+                } else {
+                    console.log('goHome has USER');
                 }
                 var granjas = controller.gcol;
-                console.log('goHome has USER');
                 App.side.show(new Granjas.GranjasList({collection: granjas}));
                 if ((gid) && (granjas.get(gid))) {
                     var mod = granjas.get(gid);
@@ -376,26 +199,6 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             opts.success = showMain;
             this.initApp(opts);
         },
-        getUsers: function (uid) {
-            var users;
-            $.couch.userDb(function (db) {
-                App.userDB = db;
-                db.allDocs({
-                    success: function (resp) {
-                        if (resp.rows) {
-                            console.log('rows', resp.rows.length);
-                            App.users = users = _.map(resp.rows, function (item) {
-                                return item.doc;
-                            });
-                            console.log('userDb', App.users);
-                        }
-                    },
-                    include_docs: true,
-                    startkey: "org.couchdb.user:",
-                    descending: false
-                });
-            });
-        },
         goUsers: function (uid) {
             var controller = this;
             var opts = {};
@@ -426,11 +229,6 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         showLoggedIn: function (user) {
             console.log('user is ADMIN?', user.is_admin());
             App.nav.show(new Granjas.NavBar({model: user}));
-        },
-        navEvents: function (view) {
-            var controller = this;
-            controller.listenTo(view, 'nav:click', function (args) {
-            });
         }
     });
 

@@ -16,7 +16,10 @@ $(function () {
 
         var control = new TanTan.Granjas.Control();
         TanTan.control = control;
-        TanTan.rutas = new TanTan.Granjas.Rutas({controller: control});
+        var control_editar = new TanTan.Granjas.ControlEditar();
+        TanTan.control_editar = control_editar;
+        TanTan.rutas = {home: new TanTan.Granjas.Rutas({controller: control})};
+        TanTan.rutas.editar = new TanTan.Granjas.RutasEditar({controller: control_editar});
         TanTan.vent.on('wamp:success', function (sess) {
             ab.log('WAMP session SUCCESS');
 
@@ -64,19 +67,19 @@ $(function () {
 
         TanTan.vent.on('login:good', function (resp) {
             console.log('APP.VENT.login:good', resp);
-            TanTan.rutas.navigate('home', {trigger: true});
+            TanTan.rutas.home.navigate('home', {trigger: true});
         });
 
         TanTan.vent.on('login:failed', function (s, e, r) {
             console.log('APP.VENT.login:failed');
-            TanTan.rutas.navigate('', {trigger: true});
+            TanTan.rutas.home.navigate('', {trigger: true});
         });
 
         TanTan.vent.on('logout', function () {
             TanTan.control.showLoggedOut();
             console.log('APP.VENT.logout');
             //TanTan.rutas.navigate('', {trigger: true, replace: true});
-            TanTan.rutas.navigate('', {replace: true});
+            TanTan.rutas.home.navigate('', {replace: true});
         });
     });
     TanTan.start();
