@@ -58,8 +58,8 @@
         </div>
     </script>
     <script id="template-granja-tools" type="text/x-template">
-        <a href="#editar/granjas/<%= _id %>" class="btn btn-warning btn-editar">Editar info de granja</a>
-        <a href="#editar/granjas/<%= _id %>/estanques" class="btn btn-primary btn-nuevo">Añadir estanque</a>
+        <a href="#editar/granjas/<%= _id %>" class="btn btn-warning btn-editar">Editar info de granja <span class="glyphicon glyphicon-pencil"></span></a>
+        <a href="#editar/granjas/<%= _id %>/estanques" class="btn btn-primary btn-nuevo">Añadir estanque <span class="glyphicon glyphicon-plus"></span></a>
     </script>
     <script id="template-granja-edit" type="text/x-template">
         <div class="form-group">
@@ -106,8 +106,8 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-primary" type="submit">Guardar</button>
-                <button class="btn btn-danger" type="reset">Cancelar</button>
+                <button class="btn btn-primary" type="submit">Guardar <span class="glyphicon glyphicon-check"></span></button>
+                <button class="btn btn-danger" type="reset">Cancelar <span class="glyphicon glyphicon-ban-circle"></span></button>
             </div>
         </div>
     </script>
@@ -181,8 +181,8 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-primary" type="submit">Guardar</button>
-                <button class="btn btn-danger" type="reset">Cancelar</button>
+                <button class="btn btn-primary" type="submit">Guardar <span class="glyphicon glyphicon-check"></span></button>
+                <button class="btn btn-danger" type="reset">Cancelar <span class="glyphicon glyphicon-ban-circle"></span></button>
             </div>
         </div>
     </script>
@@ -264,8 +264,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sx-12">
-                        <button class="btn btn-primary" type="submit">Agregar muestra</button>
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
                     </div>
                 </div>
             </form>
@@ -307,21 +307,22 @@
         </div>
     </script>
     <script id="template-estx-doc" type="text/x-template">
-        <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>"><h1><%= nombre %></h1></a>
-        <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar</a>
+        <h1><%= nombre %></h1>
+        <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-warning">Editar <span class="glyphicon glyphicon-pencil"></span></a>
+        <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
-            <li><a href="#nav-alimentacion" data-toggle="tab">Alimentación</a></li>
-            <li class="active"><a href="#nav-calidad" data-toggle="tab">Calidad del agua</a></li>
+            <li class="active"><a href="#nav-alimentacion" data-toggle="tab">Alimentación</a></li>
+            <li><a href="#nav-calidad" data-toggle="tab">Calidad del agua</a></li>
             <li><a href="#nav-biometria" data-toggle="tab">Biometría</a></li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane" id="nav-alimentacion">
+            <div class="tab-pane active" id="nav-alimentacion">
                 <h1>Alimentación</h1>
             </div>
-            <div class="tab-pane active" id="nav-calidad">
+            <div class="tab-pane" id="nav-calidad">
                 <h1>Calidad del agua</h1>
             </div>
             <div class="tab-pane" id="nav-biometria">
@@ -372,7 +373,7 @@
                                 <input type="checkbox" value="remember-me"> Remember me
                             </label>
                             </div>
-                            <button class="btn btn-primary" type="submit">Sign in</button>
+                            <button class="btn btn-primary" type="submit">Ingresar <span class="glyphicon glyphicon-user"></span></button>
                         </form>
                         <ul id="lista-usuarios" class="list-group">
                         </ul>
@@ -382,11 +383,11 @@
         </div>
     </script>
     <script id="account-admin-logged-in" type="text/x-template">
-        <a href="#editar/granjas" class="btn btn-info boton-agregar" role="button">Añadir granja al sistema</a>
-        <button class="btn btn-warning boton-salir" type="submit">Salir</button>
+        <a href="#editar/granjas" class="btn btn-info boton-agregar" role="button">Añadir granja al sistema <span class="glyphicon glyphicon-plus"></span></a>
+        <button class="btn btn-danger boton-salir" type="submit">Salir <span class="glyphicon glyphicon-user"></span></button>
     </script>
     <script id="account-logged-in" type="text/x-template">
-        <button class="btn btn-warning" type="submit">Logout</button>
+        <button class="btn btn-danger boton-salir" type="submit">Salir <span class="glyphicon glyphicon-user"></span></button>
     </script>
     <script id="account-admin-menu" type="text/x-template">
         <li><a href="#granjas">Granjas</a></li>
@@ -422,7 +423,7 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div-->
-        <button class="btn btn-primary" type="submit">Sign in</button>
+        <button class="btn btn-primary" type="submit">Ingresar <span class="glyphicon glyphicon-user"></span></button>
     </script>
     <script src="./backbone.marionette/json2.js"></script>
     <script src="./backbone.marionette/jquery.js"></script>
