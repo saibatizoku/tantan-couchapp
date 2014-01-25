@@ -57,19 +57,27 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         }
     });
 
-    Granjas.AlimentacionView = Marionette.ItemView.extend({
+    Granjas.AlimentacionView = Marionette.Layout.extend({
         template: "#template-estx-alimentacion",
-        className: "panel panel-default"
+        className: "panel-group",
+        regions: {
+            reportes: "#alim-reportes",
+            accion: "#alim-accion"
+        },
+        initialize: function () {
+            var mod;
+            if (!_.isUndefined(this.model)) {
+                mod = this.model;
+            }
+        }
     });
 
-    Granjas.CalidadView = Marionette.ItemView.extend({
-        template: "#template-estx-calidad",
-        className: "panel panel-default"
+    Granjas.CalidadView = Granjas.AlimentacionView.extend({
+        template: "#template-estx-calidad"
     });
 
-    Granjas.BiometriaView = Marionette.ItemView.extend({
-        template: "#template-estx-biometria",
-        className: "panel panel-default"
+    Granjas.BiometriaView = Granjas.AlimentacionView.extend({
+        template: "#template-estx-biometria"
     });
 
     Granjas.EstanquePill = Marionette.ItemView.extend({

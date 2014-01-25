@@ -187,36 +187,89 @@
         </div>
     </script>
     <script id="template-estx-alimentacion" type="text/x-template">
-        <div class="panel-heading">
-            Alimentación
+        <section id="alim-reportes">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Reportes relevantes
+            </div>
+            <div class="panel-body">
+            </div>
         </div>
-        <div class="panel-body">
-            <form id="form_alim" class="evento">
-                <input type="hidden" name="tipo" value="alimentacion">
-                <input type="hidden" name="estanque_id" value="69adbfc779f1ffdfc2a6b7be8a00586e">
-                <label>Agregar ración</label>
-                <table class="table table-bordered table-condensed">
-                    <tbody class="">
-                        <tr class="cajita">
-                            <th>Ración 1</th>
-                            <th>Ración 2</th>
-                            <th>Ración 3</th>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="racion1" placeholder="0.0" value=""></td>
-                            <td><input type="text" name="racion2" placeholder="0.0" value=""></td>
-                            <td><input type="text" name="racion3" placeholder="0.0" value=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="proteina1" placeholder="0.0" value=""></td>
-                            <td><input type="text" name="proteina2" placeholder="0.0" value=""></td>
-                            <td><input type="text" name="proteina3" placeholder="0.0" value=""></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <input class="btn" type="submit" value="Agregar ración">
-            </form>
-        </div>
+        </section>
+        <section id="alim-accion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Registro de las raciones de alimento diario
+                </div>
+                <div class="panel-body">
+                    <form id="form_alim" class="evento">
+                        <input type="hidden" name="tipo" value="alimentacion">
+                        <h4>Primera ración</h4>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label for="racion[0][alimento]" class="control-label">Alimento</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[0][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>" autofocus>
+                                    <span class="input-group-addon">kg</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="racion[0][proteina]" class="control-label">Proteina</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[0][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <h4>Segunda ración</h4>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label for="racion[1][alimento]" class="control-label">Alimento</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[1][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>">
+                                    <span class="input-group-addon">kg</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="racion[1][proteina]" class="control-label">Proteina</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[1][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <h4>Tercera ración</h4>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label for="racion[2][alimento]" class="control-label">Alimento</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[2][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>">
+                                    <span class="input-group-addon">kg</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="racion[2][proteina]" class="control-label">Proteina</label>
+                                <div class="input-group">
+                                    <input type="text" name="racion[2][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sx-12">
+                                <div class="btn-toolbar">
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
     </script>
     <script id="template-estx-calidad" type="text/x-template">
         <div class="panel-heading">
@@ -226,39 +279,57 @@
             <form id="form_mues" class="">
                 <input type="hidden" name="tipo" value="muestra">
                 <div class="form-group">
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="ph" class="control-label">pH</label>
-                        <input type="text" id="ph" name="ph" class="form-control" placeholder="Ejem.: 7.0" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="ph" name="ph" class="form-control" placeholder="Ejem.: 7.0" value="<%= '' %>" autofocus>
+                            <span class="input-group-addon">&nbsp;</span>
+                        </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="temperatura" class="control-label">Temperatura</label>
-                        <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="24.3" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="Ejem: 24.3" value="<%= '' %>">
+                            <span class="input-group-addon">°C</span>
+                        </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="od" class="control-label">OD</label>
-                        <input type="text" id="od" name="od" class="form-control" placeholder="5.5" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="od" name="od" class="form-control" placeholder="Ejem: 5.5" value="<%= '' %>">
+                            <span class="input-group-addon">%</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="amonio" class="control-label">Amonio</label>
-                        <input type="text" id="amonio" name="amonio" class="form-control" placeholder="0.7" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="amonio" name="amonio" class="form-control" placeholder="0.7" value="<%= '' %>">
+                            <span class="input-group-addon">mg/ml</span>
+                        </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="tss" class="control-label">TSS</label>
-                        <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="0.3" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="0.3" value="<%= '' %>">
+                            <span class="input-group-addon">mg/ml</span>
+                        </div>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="mortandad" class="control-label">Mortandad</label>
-                        <input type="text" id="mortandad" name="mortandad" class="form-control" placeholder="5" value="<%= '' %>">
+                        <div class="input-group">
+                            <input type="text" id="mortandad" name="mortandad" class="form-control" placeholder="Ejem: 5" value="<%= '' %>">
+                            <span class="input-group-addon">peces</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-4">
+                    <div class="col-sm-4">
                         <label for="recambio" class="control-label">Recambio</label>
                         <input type="text" id="recambio" name="recambio" class="form-control" placeholder="0" value="<%= '' %>">
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-sm-8">
                         <label for="observaciones" class="control-label">Observaciones</label>
                         <textarea name="observaciones" class="form-control" placeholder="Observaciones de este muestreo" value=""></textarea>
                     </div>
@@ -278,31 +349,109 @@
         <div class="panel-body">
             <form id="form_biom" class="">
                 <input type="hidden" name="tipo" value="biometria">
-                <table class="table table-stripped table-condensed">
-                    <tbody class="">
-                        <tr>
-                            <th></th>
-                            <th>Cantidad</th>
-                            <th>Peso</th>
-                        </tr>
-                        <tr>
-                            <th>Talla 1</th>
-                            <td><input class="talla-total" type="text" name="talla1" value="0" placeholder="0" readonly="true"><span class="mas">+</span><span class="menos">-</span><input class="peso" type="number" name="cantidad1" placeholder="0"></td>
-                            <td><input type="number" name="peso1" placeholder="0" min="0" value=""></td>
-                        </tr>
-                        <tr>
-                            <th>Talla 2</th>
-                            <td><input class="talla-total" type="text" name="talla2" value="0" placeholder="0" readonly="true"><span class="mas">+</span><span class="menos">-</span><input class="peso" type="number" name="cantidad2" placeholder="0"></td>
-                            <td><input type="number" name="peso2" placeholder="0" min="0" value=""></td>
-                        </tr>
-                        <tr>
-                            <th>Talla 3</th>
-                            <td><input class="talla-total" type="text" name="talla3" value="0" placeholder="0" readonly="true"><span class="mas">+</span><span class="menos">-</span><input class="peso" type="number" name="cantidad3" placeholder="0"></td>
-                            <td><input type="number" name="peso3" placeholder="0" min="0" value=""></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <input class="btn" type="submit" value="Agregar muestra">
+                <h4>Talla #1</h4>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="talla[0][peso]" class="control-label">Peso</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[0][peso]" class="form-control" placeholder="0" value="<%= '' %>" autofocus>
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="talla[0][cantidad]" class="control-label">Cantidad</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[0][cantidad]" class="form-control" placeholder="0" value="<%= '' %>" readonly>
+                            <span class="input-group-addon">peces</span>
+                        </div>
+                        <div class="btn-group btn-group-justified btn-group-lg">
+                            <a href="" class="btn btn-success boton-mas"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a href="" class="btn btn-danger boton-menos"><span class="glyphicon glyphicon-minus"></span></a>
+                        </div>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="1"> 1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="5" checked> 5
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="10"> 10
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <h4>Talla #2</h4>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="talla[1][peso]" class="control-label">Peso</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[1][peso]" class="form-control" placeholder="0" value="<%= '' %>">
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="talla[1][cantidad]" class="control-label">cantidad</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[1][cantidad]" class="form-control" placeholder="0" value="<%= '' %>" readonly>
+                            <span class="input-group-addon">peces</span>
+                        </div>
+                        <div class="btn-group btn-group-justified btn-group-lg">
+                            <a href="" class="btn btn-success boton-mas"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a href="" class="btn btn-danger boton-menos"><span class="glyphicon glyphicon-minus"></span></a>
+                        </div>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="1"> 1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="5" checked> 5
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="10"> 10
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <h4>Talla #3</h4>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="talla[2][peso]" class="control-label">Peso</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[2][peso]" class="form-control" placeholder="0" value="<%= '' %>">
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="talla[2][cantidad]" class="control-label">Cantidad</label>
+                        <div class="input-group">
+                            <input type="text" name="talla[2][cantidad]" class="form-control" placeholder="0" value="<%= '' %>" readonly>
+                            <span class="input-group-addon">peces</span>
+                        </div>
+                        <div class="btn-group btn-group-justified btn-group-lg">
+                            <a href="" class="btn btn-success boton-mas"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a href="" class="btn btn-danger boton-menos"><span class="glyphicon glyphicon-minus"></span></a>
+                        </div>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="1"> 1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="5" checked> 5
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="tanto[0]" value="10"> 10
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sx-12">
+                        <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
+                    </div>
+                </div>
             </form>
         </div>
     </script>
