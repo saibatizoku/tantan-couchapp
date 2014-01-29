@@ -54,8 +54,22 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
 
     Granjas.GranjaView = Marionette.ItemView.extend({
         template: "#template-granja-link",
-        className: "thumbnail",
-        model: Granjas.GranjaDoc
+        tagName: "a",
+        className: "list-group-item",
+        model: Granjas.GranjaDoc,
+        initialize: function () {
+            this.$el.attr('href', '#granjas/'+this.model.id);
+        },
+        events: {
+            "click": "granjaClick"
+        },
+        granjaClick: function (e) {
+            var args = {
+                view: this,
+                model: this.model
+            };
+            App.vent.trigger("granja:click", args);
+        }
     });
 
     Granjas.GranjaDocView = Marionette.Layout.extend({
@@ -66,6 +80,9 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             tools: "#granja-tools",
             subnav: "#granja-subnav",
             content: "#granja-content"
+        },
+        initialize: function () {
+            this.ecol = this.getEstanques();
         },
         onRender: function () {
             if (_.isUndefined(this.model)) {
@@ -82,9 +99,42 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         },
         showDoc: function (model) {
             this.header.show(new Granjas.GranjaMain({model: model}));
-            this.subnav.show(new Granjas.EstanquesNavPills({collection: model.nodos}));
+            this.subnav.show(new Granjas.EstanquesNavPills({collection: this.ecol}));
             this.tools.show(new Granjas.GranjaTools({model: model}));
-            this.content.show(new Granjas.GranjaInfo({model: model}));
+            //this.content.show(new Granjas.GranjaInfo({model: model}));
+        },
+        getEstanques: function () {
+            var gid = this.model.id;
+            var ecol = new Granjas.EstanquesCol();
+            //var ecol = new Granjas.EstnxCol();
+            ecol.on('add', function (model, collection, options) {
+                var alim = new Granjas.OperacionesCol();
+                var cali = new Granjas.OperacionesCol();
+                var biom = new Granjas.OperacionesCol();
+                var eid = model.id;
+                alim.fetch({
+                    startkey: [eid,"alimentacion"],
+                    endkey: [eid,"alimentacion0"],
+                    limit: 10
+                });
+                model.alimentacion = alim;
+                cali.fetch({
+                    startkey: [eid,"muestra"],
+                    endkey: [eid,"muestra0"],
+                    limit: 10
+                });
+                biom.fetch({
+                    startkey: [eid,"biometria"],
+                    endkey: [eid,"biometria0"],
+                    limit: 10
+                });
+                model.biometria = biom;
+            });
+            ecol.fetch({key: [gid,1]});
+            //ecol.db.gid = gid;
+            //console.log("ECOL.DB", ecol.db);
+            //ecol.fetch({gid: gid});
+            return ecol;
         }
     });
 
@@ -122,7 +172,18 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         template: "#template-granjas-list",
         className: "thumbnail",
         itemView: Granjas.GranjaView,
-        itemViewContainer: "#listado"
+        itemViewContainer: "#listado",
+        initialize: function () {
+            this.listenTo(App.vent, "granja:click", this.granjaClicked);
+            this.listenTo(this.collection, 'sync', function (collection, resp, options) {
+                console.log('granjas synced', options);
+                App.vent.trigger('granjas:loaded', collection);
+            });
+        },
+        granjaClicked: function (args) {
+            this.$(".list-group-item").removeClass('active');
+            args.view.$el.addClass('active');
+        }
     });
 
 });

@@ -114,12 +114,30 @@
     <script id="template-granja-main" type="text/x-template">
         <div class="page-header">
             <h1><a href="#granjas/<%= _id %>"><%= nombre %></a></h1>
-        </div>
-    </script>
-    <script id="template-granja-subnav" type="text/x-template">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div id="estxs"></div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-collapse collapse">
+            <% if ((!_.isUndefined(razonsocial)) && (razonsocial != '')) { %>
+                <p><span class="label label-info"><%= razonsocial %></span></p>
+            <% } %>
+            <% if ((!_.isUndefined(contacto)) && (contacto != '')) { %>
+                <p><span class="label label-info"><%= contacto %></span></p>
+            <% } %>
+            <% if ((!_.isUndefined(direccion)) && (direccion != '')) { %>
+                <p><span class="label label-info"><%= direccion %></span></p>
+            <% } %>
+            <% if ((!_.isUndefined(localidad)) && (localidad != '')) { %>
+                <p><span class="label label-info"><%= localidad %></span></p>
+            <% } %>
+            <% if ((!_.isUndefined(municipio)) && (municipio != '')) { %>
+                <p><span class="label label-info"><%= municipio %></span></p>
+            <% } %>
+            <% if ((!_.isUndefined(estado)) && (estado != '')) { %>
+                <p><span class="label label-info"><%= estado %></span></p>
+            <% } %>
             </div>
         </div>
     </script>
@@ -140,7 +158,7 @@
         <section id="granja-content"></section>
     </script>
     <script id="template-granja-link" type="text/x-template">
-        <a href="#granjas/<%= _id %>/estanques"><%= nombre %></a>
+        <h4 class="list-group-item-title"><%= nombre %></h4>
     </script>
     <script id="template-estx-info" type="text/x-template">
         <a href="#estanques/<%= _id %>"><%= nombre %></a>
@@ -506,7 +524,7 @@
     </script>
     <script id="template-granjas-list" type="text/x-template">
         <h1>Granjas</h1>
-        <div id="listado"></div>
+        <div id="listado" class="list-group"></div>
     </script>
     <script id="template-admin-users" type="text/x-template">
         <div class="panel panel-default">

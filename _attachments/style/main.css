@@ -1,2 +1,5 @@
 /* add styles here */
-
+.form-group .btn,
+.form-group .btn-group {margin:15px 0;}
+#main .nav-tabs {margin-top:15px;}
+#main .tab-content {padding:10px;border:1px solid #ddd;border-top:0;}
