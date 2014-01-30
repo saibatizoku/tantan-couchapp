@@ -3,60 +3,11 @@
 
 TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
 
-    Granjas.UserDoc = Backbone.Model.extend({
-        defaults: {
-            name: '',
-            roles: []
-        },
-        type: 'user',
-        is_admin: function () {
-            return (this.get('roles').indexOf('_admin') != -1);
-        }
-    });
-
-    Granjas.UserDocs = Backbone.Collection.extend({
-        url: "/usuarios",
-        model: Granjas.UserDoc
-    });
-
-    Granjas.UsersManageView = Marionette.Layout.extend({
-        template: '#template-admin-users',
-        className: 'panel-group',
-        regions: {
-            granjas: '#panel-granjas',
-            users: '#lista-usuarios'
-        },
-        ui: {
-            "listagranjas": "#lista-granjas",
-            "listausuarios": "#lista-usuarios",
-            "usuarios": "#lista-usuarios li"
-        },
-        initialize: function() {
-            this.getUsers();
-        },
-        getUsers: function (uid) {
-            var controller = this;
-            $.couch.userDb(function (db) {
-                db.allDocs({
-                    include_docs: true,
-                    startkey: "org.couchdb.user:",
-                    success: function (r) {
-                        console.log('allusers', JSON.stringify(r));
-                        App.vent.trigger('get:users', r);
-                        var UserS = _.map(r.rows, function (row) {
-                            console.log('allusers row', JSON.stringify(row));
-                            var usr = new Granjas.UserDoc(row.doc);
-                            var li_sel = "<li class='list-group-item'>"+row.doc.name+"</li>";
-                            var li = $(li_sel).data('doc', row.doc);
-                            li.draggable({revert: true});
-                            controller.ui.listausuarios.append(li);
-                            return usr;
-                        });
-                        controller.ui.listagranjas.droppable();
-                        controller.UserS = UserS;
-                    }
-                });
-            });
+    Granjas.AllDocs = Backbone.Collection.extend({
+        url: "/documentos",
+        db: {
+            view: "_all_docs",
+            include_docs: true
         }
     });
 
@@ -65,11 +16,10 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             "": "goHome",
             "home": "goHome",
             "granjas(/:gid)": "goHome",
-            "granjas/:gid/estanques(/:eid)": "goHome",
-            "usuarios(/:uid)": "goUsers"
+            "granjas/:gid/estanques(/:eid)": "goHome"
         },
         initialize: function () {
-            this.listenTo(App.vent, 'go:home', this.navigateHome);
+            //this.listenTo(App.vent, 'go:home', this.navigateHome);
         },
         navigateHome: function (gid, eid) {
             if ((gid) && (eid)) {
@@ -84,17 +34,32 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
 
     Granjas.Control = Marionette.Controller.extend({
         initialize: function () {
-            this.getGranjas();
+            this.gcol = undefined;
+        },
+        showLoggedIn: function (user) {
+            console.log('user is ADMIN?', user.is_admin());
+            App.nav.show(new Granjas.NavBar({model: user}));
+        },
+        showLoggedOut: function () {
+            this.gcol = undefined;
+            App.nav.show(new Granjas.NavBar());
+            App.side.close();
+            App.tools.close();
+            App.header.close();
+            App.subnav.close();
+            App.main.close();
         },
         initApp: function (opts) {
             var controller = this;
-            function showApp (r) {
-                var userCtx = r.userCtx;
-                var user = new Granjas.UserDoc(userCtx);
+            function showApp (resp) {
+                var userCtx = resp.userCtx;
+                var usr = new Granjas.UserDoc(userCtx);
                 if (userCtx.name) {
-                    controller.showLoggedIn(user);
+                    controller.showLoggedIn(usr);
                     if ((opts) && (opts.success)) {
-                        opts.success(user);
+                        var _opts = opts.session_options || {};
+                        _opts.user = usr;
+                        opts.success(_opts);
                     }
                 } else {
                     controller.showLoggedOut();
@@ -116,119 +81,78 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
                 gcol = new Granjas.GranjaCol();
                 gcol.fetch();
             }
-            gcol.on('add', function (model, collection, options) {
-                console.log('loading granja', model, collection, options);
-                model.nodos = controller.getEstanques(model.id);
-            });
-            this.gcol = gcol;
-        },
-        getEstanques: function (gid) {
-            var ecol = new Granjas.EstanquesCol();
-            ecol.on('add', function (model, collection, options) {
-                var alim = new Granjas.OperacionesCol();
-                var cali = new Granjas.OperacionesCol();
-                var biom = new Granjas.OperacionesCol();
-                var eid = model.id;
-                alim.fetch({
-                    startkey: [eid,"alimentacion"],
-                    endkey: [eid,"alimentacion0"]
-                });
-                model.alimentacion = alim;
-                cali.fetch({
-                    startkey: [eid,"muestra"],
-                    endkey: [eid,"muestra0"]
-                });
-                biom.fetch({
-                    startkey: [eid,"biometria"],
-                    endkey: [eid,"biometria0"]
-                });
-                model.biometria = biom;
-            });
-            ecol.fetch({key: [gid,1]});
-            return ecol;
-        },
-        showLoggedOut: function () {
-            App.nav.show(new Granjas.NavBar());
-            App.side.close();
-            App.tools.close();
-            App.header.close();
-            App.subnav.close();
-            App.main.close();
+            return gcol;
         },
         goHome: function (gid, eid) {
             var controller = this;
             var opts = {};
-            function showMain (user) {
+            var granjas = controller.gcol;
+            controller.listenTo(App.vent, 'granjas:loaded', function (collection) {
+                console.log('granjas cargadas. (gid,eid)', gid, eid);
+                console.log('granjas', collection);
+                if ((gid) && (collection.get(gid))) {
+                    var mod = collection.get(gid);
+                    console.log('model', mod);
+                    var gdocview = new Granjas.GranjaDocView({model: mod});
+                    App.main.show(gdocview);
+                } else {
+                    App.main.close();
+                }
+            });
+            if (_.isUndefined(granjas)) {
+                granjas = controller.getGranjas();
+            }
+            function showMain (options) {
+                var user = options.user;
                 console.log('goHome showMain', gid, user);
                 if (user.is_admin()) {
                     console.log('goHome has ADMIN');
                 } else {
                     console.log('goHome has USER');
                 }
-                var granjas = controller.gcol;
-                App.side.show(new Granjas.GranjasList({collection: granjas}));
-                if ((gid) && (granjas.get(gid))) {
-                    var mod = granjas.get(gid);
-                    console.log('model', mod);
-                    var estx = mod.nodos;
-                    console.log('estx', estx);
-                    App.header.show(new Granjas.GranjaMain({model: mod}));
-                    App.main.close();
-                    App.subnav.show(new Granjas.EstanquesNavPills({collection: controller.getEstanques(gid)}));
-                    App.tools.show(new Granjas.GranjaTools({model: mod}));
-                    if ((eid) && (estx.get(eid))) {
-                        console.log('estk', estx.get(eid));
-                        var eview = new Granjas.EstanqueView({model: estx.get(eid)});
-                        controller.listenTo(eview, "borrar:estanque", function (args) {
-                            console.log("borrando estanque", args.model.toJSON());
-                            args.model.destroy();
-                            App.vent.trigger('go:home', gid);
-                        });
-                        App.main.show(eview);
-                        //App.main.currentView.granja_id = gid;
-                    } else {
-                        App.main.show(new Granjas.GranjaInfo({model: granjas.get(gid)}));
-                    }
-                } else {
-                    App.header.close();
-                    App.subnav.close();
-                    App.tools.close();
-                    App.main.close();
-                }
+                var glist = new Granjas.GranjasListView({collection: granjas});
+                App.side.show(glist);
+                App.header.close();
+                App.subnav.close();
+                App.tools.close();
+                //if ((gid) && (granjas.get(gid))) {
+                //    var mod = granjas.get(gid);
+                //    console.log('model', mod);
+                //    var gdocview = new Granjas.GranjaDocView({model: mod});
+                //    controller.listenTo(gdocview, 'render', function () {
+                //        var subnav = gdocview.subnav.currentView;
+                //        console.log('subnav view', subnav);
+                //        //console.log('subnav col', subnav.collection.toJSON());
+                //        console.log('eid', eid);
+                //        //if ((eid) && (subnav.collection.get(eid))) {
+                //        //    console.log('estk', subnav.collection.get(eid));
+                //        //}
+                //    });
+                //    App.main.show(gdocview);
+                //    //App.header.show(new Granjas.GranjaMain({model: mod}));
+                //    ////App.main.close();
+                //    //App.subnav.show(new Granjas.EstanquesNavPills({collection: controller.getEstanques(gid)}));
+                //    ////App.subnav.show(new Granjas.EstanquesNavPills({collection: estx.get(gid)}));
+                //    //App.tools.show(new Granjas.GranjaTools({model: mod}));
+                //    //if ((eid) && (estx.get(eid))) {
+                //    //    console.log('estk', estx.get(eid));
+                //    //    var eview = new Granjas.EstanqueView({model: estx.get(eid)});
+                //    //    controller.listenTo(eview, "borrar:estanque", function (args) {
+                //    //        console.log("borrando estanque", args.model.toJSON());
+                //    //        args.model.destroy();
+                //    //        App.vent.trigger('go:home', gid);
+                //    //    });
+                //    //    App.main.show(eview);
+                //    //    //App.main.currentView.granja_id = gid;
+                //    //} else {
+                //    //    App.main.show(new Granjas.GranjaInfo({model: granjas.get(gid)}));
+                //    //}
+                //} else {
+                //    App.main.close();
+                //}
             }
             opts.success = showMain;
             this.initApp(opts);
-        },
-        goUsers: function (uid) {
-            var controller = this;
-            var opts = {};
-            function showMain (user) {
-                console.log('goUsers showMain', uid, user);
-                var granjas = controller.gcol;
-                console.log('goUsers has USER');
-                App.side.show(new Granjas.GranjasList({collection: granjas}));
-                if (uid) {
-                    var mod = granjas.get(uid);
-                    console.log('model', mod);
-                    App.header.show(new Granjas.GranjaMain({model: granjas.get(uid)}));
-                    App.subnav.close();
-                    App.main.close();
-                    App.subnav.show(new Granjas.EstanquesNavPills({collection: mod.nodos}));
-                    App.tools.show(new Granjas.GranjaTools({model: granjas.get(uid)}));
-                    //App.main.show(new Granjas.UsersManageView({model: granjas.get(gid)}));
-                } else {
-                    App.header.close();
-                    App.subnav.close();
-                    App.tools.close();
-                    App.main.show(new Granjas.UsersManageView());
-                }
-            }
-            opts.success = showMain;
-            this.initApp(opts);
-        },
-        showLoggedIn: function (user) {
-            console.log('user is ADMIN?', user.is_admin());
-            App.nav.show(new Granjas.NavBar({model: user}));
         }
     });
 

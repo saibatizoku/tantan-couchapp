@@ -3,47 +3,6 @@
 
 TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
 
-    Granjas.UsersManageView = Marionette.Layout.extend({
-        template: '#template-admin-users',
-        className: 'panel-group',
-        regions: {
-            granjas: '#panel-granjas',
-            users: '#lista-usuarios'
-        },
-        ui: {
-            "listagranjas": "#lista-granjas",
-            "listausuarios": "#lista-usuarios",
-            "usuarios": "#lista-usuarios li"
-        },
-        initialize: function() {
-            this.getUsers();
-        },
-        getUsers: function (uid) {
-            var controller = this;
-            $.couch.userDb(function (db) {
-                db.allDocs({
-                    include_docs: true,
-                    startkey: "org.couchdb.user:",
-                    success: function (r) {
-                        console.log('allusers', JSON.stringify(r));
-                        App.vent.trigger('get:users', r);
-                        var UserS = _.map(r.rows, function (row) {
-                            console.log('allusers row', JSON.stringify(row));
-                            var usr = new Granjas.UserDoc(row.doc);
-                            var li_sel = "<li class='list-group-item'>"+row.doc.name+"</li>";
-                            var li = $(li_sel).data('doc', row.doc);
-                            li.draggable({revert: true});
-                            controller.ui.listausuarios.append(li);
-                            return usr;
-                        });
-                        controller.ui.listagranjas.droppable();
-                        controller.UserS = UserS;
-                    }
-                });
-            });
-        }
-    });
-
     Granjas.RutasEditar = Marionette.AppRouter.extend({
         appRoutes: {
             "editar/granjas/:gid/estanques(/:eid)": "goEditEstanxs",
@@ -93,7 +52,8 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         goEditGranjas: function (gid) {
             var controller = this;
             var opts = {};
-            function showMain (user) {
+            function showMain (options) {
+                var user = options.user;
                 console.log('goEditGranjas showMain', gid, user);
                 if (user.is_admin()) {
                     console.log('goEdit has ADMIN');
@@ -131,7 +91,8 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         goDeleteEstanxs: function (gid, eid) {
             var controller = this;
             var opts = {};
-            function showMain (user) {
+            function showMain (options) {
+                var user = options.user;
                 console.log('goDeleteEstanxs showMain', gid, user);
                 if (user.is_admin()) {
                     console.log('goDeleteEstanxs has ADMIN');
@@ -196,7 +157,8 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         goEditEstanxs: function (gid, eid) {
             var controller = this;
             var opts = {};
-            function showMain (user) {
+            function showMain (options) {
+                var user = options.user;
                 console.log('goEditEstanxs showMain', gid, user);
                 if (user.is_admin()) {
                     console.log('goEditEstanxs has ADMIN');

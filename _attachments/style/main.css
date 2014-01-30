@@ -1,5 +1,6 @@
 /* add styles here */
 .form-group .btn,
 .form-group .btn-group {margin:15px 0;}
+#main .nav-pills li {border:1px solid #428bca;border-radius:6px;}
 #main .nav-tabs {margin-top:15px;}
 #main .tab-content {padding:10px;border:1px solid #ddd;border-top:0;}

@@ -24,6 +24,14 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         model: Granjas.GranjaDoc
     });
 
+    Granjas.GranjaPillView = Marionette.ItemView.extend({
+        template: "#template-admin-user-pill",
+        tagName: 'li',
+        triggers: {
+            'click a': 'pill:click'
+        }
+    });
+
     Granjas.GranjaInfo = Marionette.ItemView.extend({
         template: "#template-granja-info",
         className: "col-md-12"
@@ -168,7 +176,7 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
         }
     });
 
-    Granjas.GranjasList = Marionette.CompositeView.extend({
+    Granjas.GranjasListView = Marionette.CompositeView.extend({
         template: "#template-granjas-list",
         className: "thumbnail",
         itemView: Granjas.GranjaView,
@@ -177,6 +185,7 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
             this.listenTo(App.vent, "granja:click", this.granjaClicked);
             this.listenTo(this.collection, 'sync', function (collection, resp, options) {
                 console.log('granjas synced', options);
+                this.trigger('granjas:loaded', collection);
                 App.vent.trigger('granjas:loaded', collection);
             });
         },

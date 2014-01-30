@@ -170,11 +170,15 @@ TanTan.module('Granjas', function (Granjas, App, Backbone, Marionette, $, _) {
     });
 
     Granjas.EstanquesNavPills = Marionette.CollectionView.extend({
-        template: "#template-granja-subnav",
         tagName: "ul",
         className: "nav nav-pills",
         itemView: Granjas.EstanquePill,
-        itemViewContainer: "#estxs"
+        itemViewContainer: "#estxs",
+        initialize: function () {
+            this.listenTo(this.collection, 'sync', function (a,b,c) {
+                console.log('pills synced', a, b, c);
+            });
+        }
     });
 
     Granjas.EstanqueEditForm = Granjas.GranjaEditForm.extend({
