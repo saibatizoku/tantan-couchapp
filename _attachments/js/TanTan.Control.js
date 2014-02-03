@@ -90,18 +90,25 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
             estanques.fetch({ key: [model.id,1] });
             var layout = new App.Vistas.GranjaMain({model: model, collection: estanques});
             App.main.show(layout);
+
+            function showEstanque (model) {
+                console.log('opening estanque', model);
+                var eview = new App.Vistas.EstanqueView({model: model});
+                layout.content.show(eview);
+            }
             var side = new App.Vistas.GranjaContent({model: model, collection: estanques});
             side.on('itemview:render', function (v) {
                 if (v.model.id == eid) {
                     v.$el.addClass('active');
                     console.log('estn link', v.ui.link);
-                    v.ui.link.trigger('focusin');
+                    showEstanque(v.model);
                 }
                 v.on('pill:click', function (args) {
                     var  link = args.view.$el;
                     console.log('pill clicked args', args);
                     link.siblings().removeClass('active');
                     link.toggleClass('active');
+                    showEstanque(args.model);
                 });
             });
             layout.side.show(side);
