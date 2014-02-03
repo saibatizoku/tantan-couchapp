@@ -74,7 +74,7 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
 
     });
 
-    Docs.EstanquesDocs = Backbone.Collection.extend({
+    Docs.EstanqueDocs = Backbone.Collection.extend({
         url: "/estanques",
         db: {
             view: "estanques"

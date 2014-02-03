@@ -92,6 +92,51 @@
     <script id="template-nav-menu" type="text/x-template">
         <li><a href="#granjas">Granjas</a></li>
     </script>
+    <script id="template-granja-pill" type="text/x-template">
+        <a href="#granjas/<%= _id %>"><%= nombre %></a>
+    </script>
+    <script id="template-granja-main" type="text/x-template">
+        <div id="side" class="col-sm-4">
+        </div>
+        <div id="content" class="col-sm-8">
+        </div>
+    </script>
+    <script id="template-granja-content" type="text/x-template">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="panel-title"><%= nombre %></h1>
+                </div>
+                <div class="panel-body">
+                    <% if ((!_.isUndefined(razonsocial)) && (razonsocial != '')) { %>
+                        <p><span class="label label-info"><%= razonsocial %></span></p>
+                        <% } %>
+                    <% if ((!_.isUndefined(contacto)) && (contacto != '')) { %>
+                        <p><span class="label label-info"><%= contacto %></span></p>
+                        <% } %>
+                    <% if ((!_.isUndefined(direccion)) && (direccion != '')) { %>
+                        <p><span class="label label-info"><%= direccion %></span></p>
+                        <% } %>
+                    <% if ((!_.isUndefined(localidad)) && (localidad != '')) { %>
+                        <p><span class="label label-info"><%= localidad %></span></p>
+                        <% } %>
+                    <% if ((!_.isUndefined(municipio)) && (municipio != '')) { %>
+                        <p><span class="label label-info"><%= municipio %></span></p>
+                        <% } %>
+                    <% if ((!_.isUndefined(estado)) && (estado != '')) { %>
+                        <p><span class="label label-info"><%= estado %></span></p>
+                        <% } %>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Estanques <%= nombre %></h1>
+                </div>
+                <div class="panel-body">
+                    <ul id="listado-estanques" class="nav nav-pills">
+                    </ul>
+                </div>
+            </div>
+    </script>
 
     <script src="./backbone.marionette/json2.js"></script>
     <script src="./backbone.marionette/jquery.js"></script>
@@ -109,6 +154,7 @@
     <script src="./js/TanTan.Sync.js"></script>
     <script src="./js/TanTan.Docs.js"></script>
     <script src="./js/TanTan.Nav.js"></script>
+    <script src="./js/TanTan.Granja.js"></script>
     <script src="./js/TanTan.Control.js"></script>
     <script src="./js/TanTan.App.js"></script>
 </html>
