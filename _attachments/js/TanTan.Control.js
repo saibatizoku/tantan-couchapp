@@ -97,6 +97,12 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                     console.log('estn link', v.ui.link);
                     v.ui.link.trigger('focusin');
                 }
+                v.on('pill:click', function (args) {
+                    var  link = args.view.$el;
+                    console.log('pill clicked args', args);
+                    link.siblings().removeClass('active');
+                    link.toggleClass('active');
+                });
             });
             layout.side.show(side);
         },
