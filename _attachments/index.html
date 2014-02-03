@@ -38,6 +38,61 @@
             </div>
         </div>
     </body>
+    <script id="template-navbar" type="text/html">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img src="./tttexto.png" height="20"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul id="nav-menu" class="nav navbar-nav">
+            </ul>
+            <section id="nav-actions">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Nombre de usuario..." required autofocus>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Contraseña..." required>
+                </div>
+                <button class="btn btn-primary" type="submit">Ingresar <span class="glyphicon glyphicon-user"></span></button>
+
+            </form>
+            </section>
+        </div>
+    </script>
+    <script id="template-nav-logged-in-admin" type="text/x-template">
+        <a href="#editar/granjas" class="btn btn-info boton-agregar" role="button">Añadir granja al sistema <span class="glyphicon glyphicon-plus"></span></a>
+        <button class="btn btn-danger boton-salir" type="submit">Salir <span class="glyphicon glyphicon-user"></span></button>
+    </script>
+    <script id="template-nav-logged-in" type="text/x-template">
+        <button class="btn btn-danger boton-salir" type="submit">Salir <span class="glyphicon glyphicon-user"></span></button>
+    </script>
+    <script id="template-nav-logged-out" type="text/x-template">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Nombre de usuario..." required autofocus>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Contraseña..." required>
+        </div>
+        <!--div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div-->
+        <button class="btn btn-primary" type="submit">Ingresar <span class="glyphicon glyphicon-user"></span></button>
+    </script>
+    <script id="template-nav-menu-admin" type="text/x-template">
+        <li><a href="#granjas">Granjas</a></li>
+        <li><a href="#usuarios">Usuarios</a></li>
+    </script>
+    <script id="template-nav-menu" type="text/x-template">
+        <li><a href="#granjas">Granjas</a></li>
+    </script>
+
     <script src="./backbone.marionette/json2.js"></script>
     <script src="./backbone.marionette/jquery.js"></script>
     <script src="./js/jquery-migrate-1.2.1.min.js"></script>
@@ -53,5 +108,6 @@
     <script src="./js/TanTan.js"></script>
     <script src="./js/TanTan.Sync.js"></script>
     <script src="./js/TanTan.Docs.js"></script>
+    <script src="./js/TanTan.Nav.js"></script>
     <script src="./js/TanTan.App.js"></script>
 </html>
