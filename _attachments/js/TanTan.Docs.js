@@ -82,6 +82,43 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
         model: Docs.EstanqueDoc
     });
 
+    Docs.AlimentacionDoc = Backbone.Model.extend({
+        urlRoot: "/alimentacion",
+        defaults: {
+            tipo: "alimentacion",
+            racion: [{
+                alimento: 0, proteina: 0
+            },{
+                alimento: 0, proteina: 0
+            },{
+                alimento: 0, proteina: 0
+            }]
+        }
+    });
+
+    Docs.CalidadDoc = Backbone.Model.extend({
+        urlRoot: "/muestra",
+        defaults: {
+            tipo: "muestra",
+            pH: 0.0,
+            od: 0.0,
+            amonio: 0.0,
+            tss: 0.0,
+            recambio: 0,
+            mortandad: 0
+        }
+    });
+
+    Docs.BiometriaDoc = Backbone.Model.extend({
+        urlRoot: "/biometria",
+        defaults: {
+            tipo: "biometria",
+            talla: [0, 0, 0],
+            cantidad: [0, 0, 0],
+            peso: [0, 0, 0]
+        }
+    });
+
     Docs.OperacionesTipo = Backbone.Collection.extend({
         url: "/operaciones",
         db: {
