@@ -82,4 +82,19 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
         model: Docs.EstanqueDoc
     });
 
+    Docs.OperacionesTipo = Backbone.Collection.extend({
+        url: "/operaciones",
+        db: {
+            view: "operaciones-por-tipo",
+            keys: ["keys"]
+        }
+    });
+
+    Docs.OperacionesFecha = Docs.OperacionesTipo.extend({
+        db: {
+            view: "operaciones-por-fecha",
+            keys: ["keys"]
+        }
+    });
+
 });
