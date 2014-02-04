@@ -176,13 +176,49 @@
         </div>
     </script>
     <script id="template-estx-alimentacion" type="text/x-template">
-        <div id="alim-reportes" class="panel panel-default">
-            <div class="panel-heading">
-            </div>
+        <div id="alim-reportes" class="panel panel-primary">
+            <div class="panel-heading">Información relevante</div>
             <div class="panel-body">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Ayer: Alimentación - <span class="fecha">2/2/2014</span></div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <h4>Ración uno</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Ración dos</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Ración tres</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">Hoy: Calidad de agua - <span class="fecha">3/2/2014</span></div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <p><span class="label label-default">pH 7.3</span></p>
+                            <p><span class="label label-default">Amonio 0.09 mg/ml</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><span class="label label-default">Temperatura 24 °C</span></p>
+                            <p><span class="label label-default">TSS 15 mg/ml</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><span class="label label-default">OD 5.4 %</span></p>
+                            <p><span class="label label-default">Mortandad 0 </span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="alim-accion" class="panel panel-default">
+        <div id="alim-accion" class="panel panel-primary">
             <div class="panel-heading">
                 Registro de las raciones de alimento diario
             </div>
@@ -194,14 +230,14 @@
                         <div class="col-sm-6">
                             <label for="racion[0][alimento]" class="control-label">Alimento</label>
                             <div class="input-group">
-                                <input type="text" name="racion[0][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>" autofocus>
+                                <input type="text" name="racion[0][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= racion[0].alimento %>" autofocus>
                                 <span class="input-group-addon">kg</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label for="racion[0][proteina]" class="control-label">Proteina</label>
                             <div class="input-group">
-                                <input type="text" name="racion[0][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                <input type="text" name="racion[0][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= racion[0].proteina %>">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
@@ -212,14 +248,14 @@
                         <div class="col-sm-6">
                             <label for="racion[1][alimento]" class="control-label">Alimento</label>
                             <div class="input-group">
-                                <input type="text" name="racion[1][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>">
+                                <input type="text" name="racion[1][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= racion[1].alimento %>">
                                 <span class="input-group-addon">kg</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label for="racion[1][proteina]" class="control-label">Proteina</label>
                             <div class="input-group">
-                                <input type="text" name="racion[1][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                <input type="text" name="racion[1][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= racion[1].proteina %>">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
@@ -230,14 +266,14 @@
                         <div class="col-sm-6">
                             <label for="racion[2][alimento]" class="control-label">Alimento</label>
                             <div class="input-group">
-                                <input type="text" name="racion[2][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= '' %>">
+                                <input type="text" name="racion[2][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= racion[2].alimento %>">
                                 <span class="input-group-addon">kg</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label for="racion[2][proteina]" class="control-label">Proteina</label>
                             <div class="input-group">
-                                <input type="text" name="racion[2][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= '' %>">
+                                <input type="text" name="racion[2][proteina]" class="form-control" placeholder="Ejem.: 10" value="<%= racion[2].proteina %>">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
@@ -246,7 +282,7 @@
                         <div class="col-sx-12">
                             <div class="btn-toolbar">
                                 <div class="btn-group">
-                                    <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
+                                    <button class="btn btn-primary" type="submit">Guardar registro <span class="glyphicon glyphicon-plus"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -256,15 +292,51 @@
         </div>
     </script>
     <script id="template-estx-calidad" type="text/x-template">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-            </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Información relevante</div>
             <div class="panel-body">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Ayer: Alimentación  - <span class="fecha">2/2/2014</span></div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <h4>Ración uno</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Ración dos</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Ración tres</h4>
+                            <p><span class="label label-default">Alimento 20 kg</span></p>
+                            <p><span class="label label-default">Proteina 30 %</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">Ayer: Calidad de agua - <span class="fecha">2/2/2014</span></div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <p><span class="label label-default">pH 7.1</span></p>
+                            <p><span class="label label-default">Amonio 0.1 mg/ml</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><span class="label label-default">Temperatura 21 °C</span></p>
+                            <p><span class="label label-default">TSS 15 mg/ml</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><span class="label label-default">OD 7.1 %</span></p>
+                            <p><span class="label label-default">Mortandad 0 </span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                Muestra de calidad del agua
+                Registro de parámetros de calidad del agua
             </div>
             <div class="panel-body">
                 <form id="form_mues" class="">
@@ -327,7 +399,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
+                            <button class="btn btn-primary" type="submit">Guardar registro <span class="glyphicon glyphicon-plus"></span></button>
                         </div>
                     </div>
                 </form>
@@ -335,15 +407,34 @@
         </div>
     </script>
     <script id="template-estx-biometria" type="text/x-template">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-            </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Información relevante</div>
             <div class="panel-body">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Última biometría - <span class="fecha">1/15/2014</span></div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <h4>Talla #1</h4>
+                            <p><span class="label label-default">Peso promedio: 230 g</span></p>
+                            <p><span class="label label-default">Conteo total de peces: 60</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Talla #2</h4>
+                            <p><span class="label label-default">Peso promedio: 347 g</span></p>
+                            <p><span class="label label-default">Conteo total de peces: 127</span></p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Talla #3</h4>
+                            <p><span class="label label-default">Peso promedio: 380 g</span></p>
+                            <p><span class="label label-default">Conteo total de peces: 13</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                Biometría
+                Registro de biometría
             </div>
             <div class="panel-body">
                 <form id="form_biom" class="">
@@ -351,10 +442,10 @@
                     <h4>Talla #1</h4>
                     <div class="form-group">
                         <div class="col-sm-6">
-                            <label for="talla[0][peso]" class="control-label">Peso</label>
+                            <label for="talla[0][peso]" class="control-label">Peso promedio de la talla #1</label>
                             <div class="input-group">
                                 <input type="text" name="talla[0][peso]" class="form-control" placeholder="0" value="<%= '' %>" autofocus>
-                                <span class="input-group-addon">kg</span>
+                                <span class="input-group-addon">g</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -384,10 +475,10 @@
                     <h4>Talla #2</h4>
                     <div class="form-group">
                         <div class="col-sm-6">
-                            <label for="talla[1][peso]" class="control-label">Peso</label>
+                            <label for="talla[1][peso]" class="control-label">Peso promedio de la talla #2</label>
                             <div class="input-group">
                                 <input type="text" name="talla[1][peso]" class="form-control" placeholder="0" value="<%= '' %>">
-                                <span class="input-group-addon">kg</span>
+                                <span class="input-group-addon">g</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -417,10 +508,10 @@
                     <h4>Talla #3</h4>
                     <div class="form-group">
                         <div class="col-sm-6">
-                            <label for="talla[2][peso]" class="control-label">Peso</label>
+                            <label for="talla[2][peso]" class="control-label">Peso promedio de la talla #3</label>
                             <div class="input-group">
                                 <input type="text" name="talla[2][peso]" class="form-control" placeholder="0" value="<%= '' %>">
-                                <span class="input-group-addon">kg</span>
+                                <span class="input-group-addon">g</span>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -448,7 +539,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sx-12">
-                            <button class="btn btn-primary" type="submit">Agregar muestra <span class="glyphicon glyphicon-plus"></span></button>
+                            <button class="btn btn-primary" type="submit">Guardar registro <span class="glyphicon glyphicon-plus"></span></button>
                         </div>
                     </div>
                 </form>

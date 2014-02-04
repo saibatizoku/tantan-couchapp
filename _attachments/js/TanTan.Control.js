@@ -96,6 +96,7 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                 var eview = new App.Vistas.EstanqueView({model: model});
                 layout.content.show(eview);
             }
+
             var side = new App.Vistas.GranjaContent({model: model, collection: estanques});
             side.on('itemview:render', function (v) {
                 if (v.model.id == eid) {
@@ -107,8 +108,12 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                     var  link = args.view.$el;
                     console.log('pill clicked args', args);
                     link.siblings().removeClass('active');
+                    if (link.hasClass('active')) {
+                        layout.content.close();
+                    } else {
+                        showEstanque(args.model);
+                    }
                     link.toggleClass('active');
-                    showEstanque(args.model);
                 });
             });
             layout.side.show(side);
