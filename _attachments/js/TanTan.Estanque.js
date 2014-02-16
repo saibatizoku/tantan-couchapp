@@ -20,12 +20,149 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
             "click @ui.borrar": "borrar:estanque",
             "click @ui.editar": "editar:estanque"
         },
+        getDateKeys: function (date) {
+            var t = date || new Date();
+            var today = [t.getFullYear(), t.getMonth()+1, t.getDate()];
+            var yesterday = [t.getFullYear(), t.getMonth()+1, t.getDate()-1];
+            return {today: today, yesterday: yesterday};
+        },
+        getOperacionesFecha: function (options) {
+            var operaciones = new App.Docs.OperacionesFecha();
+            operaciones.fetch({
+                keys: [today, yesterday],
+                success: options.success
+            });
+        },
+        getOperacionesTipo: function (options) {
+            var operaciones = new App.Docs.OperacionesTipo();
+            operaciones.fetch(options);
+        },
+        showOperacion: function (oper_name, oper_region, doc) {
+            var dates = this.getDateKeys(new Date());
+            var controller = this;
+            var view;
+            switch (oper_name) {
+                case 'alimentacion':
+                    view = new Vistas.AlimentacionView({model: doc});
+                    break;
+                case 'calidad':
+                    view = new Vistas.CalidadView({model: doc});
+                    break;
+                case 'biometria':
+                    view = new Vistas.BiometriaView({model: doc});
+                    break;
+            }
+            view.on('save:form', function (args) {
+                console.log('save form ARGS', args);
+                var data = args.view.ui.form.serializeJSON();
+                if (args.model.id) {
+                    data.modified_at = new Date().toISOString();
+                } else {
+                    data.created_at = new Date().toISOString();
+                    data.created_date = dates.today;
+                }
+                args.model.set(data);
+                console.log('saving '+oper_name+' model', JSON.stringify(args.model.toJSON()));
+                args.model.save({
+                    success: function (m, r, o) {
+                        controller.showOperacion(oper_name, oper_region, m);
+                    }
+                });
+            });
+            oper_region.show(view);
+        },
         onRender: function () {
             var eid = this.model.id;
-            console.log("estank view id", eid, this.model.alimentacion);
-            this.alimentacion.show(new Vistas.AlimentacionView({model: this.model.alimentacion}));
-            this.calidad.show(new Vistas.CalidadView({model: this.model.calidad}));
-            this.biometria.show(new Vistas.BiometriaView({model: this.model.biometria}));
+            var controller = this;
+            console.log("estank view id", eid);
+            var dates = this.getDateKeys(new Date());
+            var today = dates.today;
+            var yesterday = dates.yesterday;
+            console.log('eid, today & yesterday', this.model.id, today, yesterday);
+
+            var tkey = _.clone(dates.today);
+            var ykey = _.clone(dates.yesterday);
+            var talimkey = [eid, "alimentacion", tkey[0], tkey[1], tkey[2]];
+            var tmueskey = [eid, "calidad", tkey[0], tkey[1], tkey[2]];
+            var yalimkey = [eid, "alimentacion", ykey[0], ykey[1], ykey[2]];
+            var ymueskey = [eid, "calidad", ykey[0], ykey[1], ykey[2]];
+            var ubiomkey = [eid, "biometria", ykey[0], ykey[1], ykey[2]];
+
+            //Alimentacion
+            controller.getOperacionesTipo({
+                keys: [talimkey, tmueskey, yalimkey],
+                success: function (col,r,o) {
+                    console.log('alim docs', JSON.stringify(col.toJSON()));
+                    var hoyalim = col.filter(function (oper) {
+                        var hoy = _.isEqual(oper.get('created_date'), dates.today);
+                        var alim = _.isEqual(oper.get('tipo'), 'alimentacion');
+                        return hoy && alim;
+                    });
+                    var doc = new App.Docs.AlimentacionDoc();
+                    doc.set('estanque_id', eid);
+                    if (hoyalim.length > 0) {
+                        doc.set('_id', hoyalim[0].id);
+                        doc.set('estanque_id', eid);
+                        doc.fetch({
+                            success: function (m,r,o) {
+                                console.log('alim doc SAVED', m);
+                                controller.showOperacion('alimentacion', controller.alimentacion, m);
+                            }
+                        });
+                    }
+                    controller.showOperacion('alimentacion', controller.alimentacion, doc);
+                }
+            });
+
+            //Calidad
+            controller.getOperacionesTipo({
+                keys: [talimkey, tmueskey, ymueskey],
+                success: function (col,r,o) {
+                    console.log('calidad docs', JSON.stringify(col.toJSON()));
+                    var hoyalim = col.filter(function (oper) {
+                        var hoy = _.isEqual(oper.get('created_date'), dates.today);
+                        var alim = _.isEqual(oper.get('tipo'), 'calidad');
+                        return hoy && alim;
+                    });
+                    var doc = new App.Docs.CalidadDoc();
+                    doc.set('estanque_id', eid);
+                    if (hoyalim.length > 0) {
+                        doc.set('_id', hoyalim[0].id);
+                        doc.fetch({
+                            success: function (m,r,o) {
+                                controller.showOperacion('calidad', controller.calidad, m);
+                            }
+                        });
+                    } else {
+                        controller.showOperacion('calidad', controller.calidad, doc);
+                    }
+                }
+            });
+
+            //Biometria
+            controller.getOperacionesTipo({
+                keys: [talimkey, tmueskey, ymueskey],
+                success: function (col,r,o) {
+                    console.log('biometria docs', JSON.stringify(col.toJSON()));
+                    var hoyalim = col.filter(function (oper) {
+                        var hoy = _.isEqual(oper.get('created_date'), dates.today);
+                        var alim = _.isEqual(oper.get('tipo'), 'biometria');
+                        return hoy && alim;
+                    });
+                    var doc = new App.Docs.CalidadDoc();
+                    doc.set('estanque_id', eid);
+                    if (hoyalim.length > 0) {
+                        doc.set('_id', hoyalim[0].id);
+                        doc.fetch({
+                            success: function (m,r,o) {
+                                controller.showOperacion('biometria', controller.biometria, m);
+                            }
+                        });
+                    } else {
+                        controller.showOperacion('biometria', controller.biometria, doc);
+                    }
+                }
+            });
         }
     });
 
