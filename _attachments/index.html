@@ -139,40 +139,58 @@
             </div>
     </script>
     <script id="template-estanque-view" type="text/x-template">
-        <div class="thumbnail">
-            <h1><%= nombre %></h1>
-            <% if ((!_.isUndefined(forma)) && (forma != '')) { %>
-            <span class="label label-info"><%= forma %></span>
-            <% } %>
-            <% if ((!_.isUndefined(material)) && (material != '')){ %>
-                <span class="label label-info"><%= material %></span>
-            <% } %>
-            <% if ((!_.isUndefined(volumen)) && (volumen != '')) { %>
-            <span class="label label-info"><%= volumen+' litros' %></span>
-            <% } %>
-            <% if ((!_.isUndefined(dimensiones)) && (dimensiones != '')) { %>
-            <span class="label label-info"><%= dimensiones %></span>
-            <% } %>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4>Datos del estanque <%= nombre %></h4>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-justified">
+                        <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-warning boton-editar">Editar <span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="thumbnail">
+                    <div>
+                    <% if ((!_.isUndefined(forma)) && (forma != '')) { %>
+                        <span class="label label-info"><%= forma %></span>
+                        <% } %>
+                    <% if ((!_.isUndefined(material)) && (material != '')){ %>
+                        <span class="label label-info"><%= material %></span>
+                        <% } %>
+                    <% if ((!_.isUndefined(volumen)) && (volumen != '')) { %>
+                        <span class="label label-info"><%= volumen+' litros' %></span>
+                        <% } %>
+                    <% if ((!_.isUndefined(dimensiones)) && (dimensiones != '')) { %>
+                        <span class="label label-info"><%= dimensiones %></span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
         </div>
-        <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-warning">Editar <span class="glyphicon glyphicon-pencil"></span></a>
-        <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#nav-alimentacion" data-toggle="tab">Alimentación</a></li>
-            <li><a href="#nav-calidad" data-toggle="tab">Calidad del agua</a></li>
-            <li><a href="#nav-biometria" data-toggle="tab">Biometría</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div class="tab-pane active" id="nav-alimentacion">
-                <h1>Alimentación</h1>
+        <div id="operaciones" class="panel panel-info">
+            <div class="panel-heading">
+                Actividad del estanque <%= nombre %>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#nav-alimentacion" data-toggle="tab">Alimentación</a></li>
+                    <li><a href="#nav-calidad" data-toggle="tab">Calidad del agua</a></li>
+                    <li><a href="#nav-biometria" data-toggle="tab">Biometría</a></li>
+                </ul>
             </div>
-            <div class="tab-pane" id="nav-calidad">
-                <h1>Calidad del agua</h1>
-            </div>
-            <div class="tab-pane" id="nav-biometria">
-                <h1>Biometría</h1>
+            <div class="panel-body">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="nav-alimentacion">
+                        <h1>Alimentación</h1>
+                    </div>
+                    <div class="tab-pane" id="nav-calidad">
+                        <h1>Calidad del agua</h1>
+                    </div>
+                    <div class="tab-pane" id="nav-biometria">
+                        <h1>Biometría</h1>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
@@ -231,7 +249,7 @@
                         <div class="col-sm-6">
                             <label for="racion[0][alimento]" class="control-label">Alimento</label>
                             <div class="input-group">
-                                <input type="text" name="racion[0][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= racion[0].alimento %>" autofocus>
+                                <input type="text" name="racion[0][alimento]" class="form-control" placeholder="Ejem.: 22.0" value="<%= racion[0].alimento %>">
                                 <span class="input-group-addon">kg</span>
                             </div>
                         </div>
@@ -344,23 +362,23 @@
                     <input type="hidden" name="tipo" value="muestra">
                     <div class="form-group">
                         <div class="col-sm-4">
-                            <label for="ph" class="control-label">pH</label>
+                            <label for="pH" class="control-label">pH</label>
                             <div class="input-group">
-                                <input type="text" id="ph" name="ph" class="form-control" placeholder="Ejem.: 7.0" value="<%= '' %>" autofocus>
+                                <input type="text" name="pH" class="form-control" placeholder="Ejem.: 7.0" value="<%= '' %>">
                                 <span class="input-group-addon">&nbsp;</span>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <label for="temperatura" class="control-label">Temperatura</label>
                             <div class="input-group">
-                                <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="Ejem: 24.3" value="<%= '' %>">
+                                <input type="text" name="temperatura" class="form-control" placeholder="Ejem: 24.3" value="<%= '' %>">
                                 <span class="input-group-addon">°C</span>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <label for="od" class="control-label">OD</label>
                             <div class="input-group">
-                                <input type="text" id="od" name="od" class="form-control" placeholder="Ejem: 5.5" value="<%= '' %>">
+                                <input type="text" name="od" class="form-control" placeholder="Ejem: 5.5" value="<%= '' %>">
                                 <span class="input-group-addon">%</span>
                             </div>
                         </div>
@@ -369,21 +387,21 @@
                         <div class="col-sm-4">
                             <label for="amonio" class="control-label">Amonio</label>
                             <div class="input-group">
-                                <input type="text" id="amonio" name="amonio" class="form-control" placeholder="0.7" value="<%= '' %>">
+                                <input type="text" name="amonio" class="form-control" placeholder="0.7" value="<%= '' %>">
                                 <span class="input-group-addon">mg/ml</span>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <label for="tss" class="control-label">TSS</label>
                             <div class="input-group">
-                                <input type="text" id="temperatura" name="temperatura" class="form-control" placeholder="0.3" value="<%= '' %>">
+                                <input type="text" name="tss" class="form-control" placeholder="0.3" value="<%= '' %>">
                                 <span class="input-group-addon">mg/ml</span>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <label for="mortandad" class="control-label">Mortandad</label>
                             <div class="input-group">
-                                <input type="text" id="mortandad" name="mortandad" class="form-control" placeholder="Ejem: 5" value="<%= '' %>">
+                                <input type="text" name="mortandad" class="form-control" placeholder="Ejem: 5" value="<%= '' %>">
                                 <span class="input-group-addon">peces</span>
                             </div>
                         </div>
@@ -391,7 +409,7 @@
                     <div class="form-group">
                         <div class="col-sm-4">
                             <label for="recambio" class="control-label">Recambio</label>
-                            <input type="text" id="recambio" name="recambio" class="form-control" placeholder="0" value="<%= '' %>">
+                            <input type="text" name="recambio" class="form-control" placeholder="0" value="<%= '' %>">
                         </div>
                         <div class="col-sm-8">
                             <label for="observaciones" class="control-label">Observaciones</label>
@@ -445,7 +463,7 @@
                         <div class="col-sm-6">
                             <label for="talla[0][peso]" class="control-label">Peso promedio de la talla #1</label>
                             <div class="input-group">
-                                <input type="text" name="talla[0][peso]" class="form-control" placeholder="0" value="<%= '' %>" autofocus>
+                                <input type="text" name="talla[0][peso]" class="form-control" placeholder="0" value="<%= '' %>">
                                 <span class="input-group-addon">g</span>
                             </div>
                         </div>
@@ -546,6 +564,36 @@
                 </form>
             </div>
         </div>
+    </script>
+    <script id="template-estanque-editar" type="text/x-template">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="modal-formLabel">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">Nombre</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="title" placeholder="Nombre" value="<%= nombre %>" autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description" class="col-sm-2 control-label">Descripción</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="material" placeholder="Material" value=<%= material %>>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
     </script>
 
     <script src="./backbone.marionette/json2.js"></script>

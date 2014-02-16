@@ -5,7 +5,7 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
 
     Vistas.EstanqueView = Marionette.Layout.extend({
         template: "#template-estanque-view",
-        className: "col-sm-12",
+        className: "panel-group",
         model: App.Docs.EstanqueDoc,
         regions: {
             alimentacion: "#nav-alimentacion",
@@ -13,10 +13,12 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
             biometria: "#nav-biometria"
         },
         ui: {
-            "borrar": ".boton-borrar"
+            "borrar": ".boton-borrar",
+            "editar": ".boton-editar"
         },
         triggers: {
-            "click @ui.borrar": "borrar:estanque"
+            "click @ui.borrar": "borrar:estanque",
+            "click @ui.editar": "editar:estanque"
         },
         onRender: function () {
             var eid = this.model.id;
@@ -45,7 +47,34 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
     Vistas.AlimentacionView = Marionette.Layout.extend({
         template: "#template-estx-alimentacion",
         className: "panel-group",
+        regions: {
+            reportes: "#alim-reportes",
+            accion: "#alim-accion"
+        },
+        initialize: function () {
+            var mod;
+            if (!_.isUndefined(this.model)) {
+                mod = this.model;
+            }
+        },
         ui: {
+            "form": "form",
+            "save": "button[type=submit]"
+        },
+        triggers: {
+            "click @ui.save": "save:form"
+        }
+    });
+
+    Vistas.CalidadView = Vistas.AlimentacionView.extend({
+        template: "#template-estx-calidad"
+    });
+
+    Vistas.BiometriaView = Vistas.AlimentacionView.extend({
+        template: "#template-estx-biometria",
+        ui: {
+            form: "form",
+            save: "button[type=submit]",
             mas: ".boton-mas",
             menos: ".boton-menos",
             tanto1: "input[name=tanto-0]",
@@ -90,25 +119,25 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
                 thisinput.val(cantidad);
             }
         },
-        regions: {
-            reportes: "#alim-reportes",
-            accion: "#alim-accion"
+    });
+
+    Vistas.EstanqueEdit = Marionette.ItemView.extend({
+        template: "#template-estanque-editar",
+        className: "modal fade",
+        attributes: {
+            id: 'modal-form',
+            tabindex: '-1',
+            role: 'dialog',
+            'aria-labelledby': 'modal-formLabel',
+            'aria-hidden': 'true'
         },
-        initialize: function () {
-            var mod;
-            if (!_.isUndefined(this.model)) {
-                mod = this.model;
-            }
+        onRender: function () {
+            var view = this;
+            this.$el.modal('show');
+            this.$el.on('hidden.bs.modal', function (e) {
+                view.trigger('cerrar:editar');
+            });
         }
     });
-
-    Vistas.CalidadView = Vistas.AlimentacionView.extend({
-        template: "#template-estx-calidad"
-    });
-
-    Vistas.BiometriaView = Vistas.AlimentacionView.extend({
-        template: "#template-estx-biometria"
-    });
-    
 
 });
