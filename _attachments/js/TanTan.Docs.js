@@ -97,15 +97,17 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
     });
 
     Docs.CalidadDoc = Backbone.Model.extend({
-        urlRoot: "/muestra",
+        urlRoot: "/calidad",
         defaults: {
-            tipo: "muestra",
+            tipo: "calidad",
             pH: 0.0,
             od: 0.0,
+            temperatura: 0.0,
             amonio: 0.0,
             tss: 0.0,
             recambio: 0,
-            mortandad: 0
+            mortandad: 0,
+            observaciones: ""
         }
     });
 
