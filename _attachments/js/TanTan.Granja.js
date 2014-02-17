@@ -19,8 +19,13 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         className: 'panel-group',
         itemView: Vistas.GranjaPill,
         itemViewContainer: "#listado-estanques",
-        onRender: function () {
-
+        ui: {
+            "borrar": ".boton-borrar",
+            "editar": ".boton-editar"
+        },
+        triggers: {
+            "click @ui.borrar": "borrar:granja",
+            "click @ui.editar": "editar:granja"
         }
     });
 
@@ -30,6 +35,25 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         regions: {
             side: "#side",
             content: "#content"
+        }
+    });
+
+    Vistas.GranjaEdit = Marionette.ItemView.extend({
+        template: "#template-granja-editar",
+        className: "modal fade",
+        attributes: {
+            id: 'modal-form',
+            tabindex: '-1',
+            role: 'dialog',
+            'aria-labelledby': 'modal-formLabel',
+            'aria-hidden': 'true'
+        },
+        onRender: function () {
+            var view = this;
+            this.$el.modal('show');
+            this.$el.on('hidden.bs.modal', function (e) {
+                view.trigger('cerrar:editar');
+            });
         }
     });
 

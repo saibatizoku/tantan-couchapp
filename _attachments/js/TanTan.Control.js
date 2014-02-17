@@ -123,6 +123,14 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                     link.toggleClass('active');
                 });
             });
+            controller.listenTo(side, 'editar:granja', function (args) {
+                console.log('editando granja', args.model.toJSON());
+                var editview = new App.Vistas.GranjaEdit({model: args.model});
+                controller.listenTo(editview, 'cerrar:editar', function () {
+                    controller.showGranja(editview.model);
+                });
+                layout.content.show(editview);
+            });
             layout.side.show(side);
         },
         showNavBar: function (user) {
