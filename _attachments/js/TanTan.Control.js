@@ -158,7 +158,7 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                 var editview = new App.Vistas.EstanqueEdit({model: nuevo});
                 controller.listenTo(editview, 'cerrar:editar', function () {
                     console.log('cerrando sin guardar');
-                    //showEstanque(editview.model);
+                    side.render();
                 });
                 controller.listenTo(editview, 'save:form', function (args) {
                     var data = args.view.ui.form.serializeJSON();
