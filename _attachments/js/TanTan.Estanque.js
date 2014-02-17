@@ -20,6 +20,14 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
             "click @ui.borrar": "borrar:estanque",
             "click @ui.editar": "editar:estanque"
         },
+        templateHelpers: {
+            hasInfo: function () {
+                return ((this.forma > 0) || (this.dimensiones > 0) || (this.volumen.length > 0) || (this.material > 0));
+            },
+            isAdmin: function () {
+                return App.request('isAdmin');
+            }
+        },
         getDateKeys: function (date) {
             var t = date || new Date();
             var today = [t.getFullYear(), t.getMonth()+1, t.getDate()];

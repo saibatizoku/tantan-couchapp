@@ -26,6 +26,11 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         triggers: {
             "click @ui.borrar": "borrar:granja",
             "click @ui.editar": "editar:granja"
+        },
+        templateHelpers: {
+            isAdmin: function () {
+                return App.request('isAdmin');
+            }
         }
     });
 
