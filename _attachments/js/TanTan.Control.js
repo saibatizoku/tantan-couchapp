@@ -99,6 +99,11 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
             function showEstanque (model) {
                 console.log('opening estanque', model);
                 var eview = new App.Vistas.EstanqueView({model: model});
+                controller.listenTo(eview, 'borrar:estanque', function (args) {
+                    console.log('borrando estanque');
+                    args.model.destroy();
+                    layout.content.close();
+                });
                 controller.listenTo(eview, 'editar:estanque', function (args) {
                     var editview = new App.Vistas.EstanqueEdit({model: model});
                     controller.listenTo(editview, 'cerrar:editar', function () {
