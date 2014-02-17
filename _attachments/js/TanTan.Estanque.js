@@ -22,7 +22,7 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         },
         templateHelpers: {
             hasInfo: function () {
-                return ((this.forma > 0) || (this.dimensiones > 0) || (this.volumen.length > 0) || (this.material > 0));
+                return ((this.forma.length > 0) || (this.dimensiones.length > 0) || (this.volumen.length > 0) || (this.material.length > 0));
             },
             isAdmin: function () {
                 return App.request('isAdmin');
@@ -113,7 +113,7 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
                         doc.set('estanque_id', eid);
                         doc.fetch({
                             success: function (m,r,o) {
-                                console.log('alim doc SAVED', m);
+                                console.log('alim doc FETCHED', m);
                                 controller.showOperacion('alimentacion', controller.alimentacion, m);
                             }
                         });

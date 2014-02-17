@@ -31,6 +31,12 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
             isAdmin: function () {
                 return App.request('isAdmin');
             }
+        },
+        collectionEvents: {
+            change: function (m, r, o) {
+                console.log('estanx collection CHANGED', m, r, o);
+                this.render();
+            }
         }
     });
 

@@ -218,22 +218,18 @@
             </div>
             <% if (hasInfo()) { %>
             <div class="panel-body">
-                <div class="thumbnail">
-                    <div>
-                    <% if ((!_.isUndefined(forma)) && (forma != '')) { %>
-                        <span class="label label-info"><%= forma %></span>
-                        <% } %>
-                    <% if ((!_.isUndefined(material)) && (material != '')){ %>
-                        <span class="label label-info"><%= material %></span>
-                        <% } %>
-                    <% if ((!_.isUndefined(volumen)) && (volumen != '')) { %>
-                        <span class="label label-info"><%= volumen+' litros' %></span>
-                        <% } %>
-                    <% if ((!_.isUndefined(dimensiones)) && (dimensiones != '')) { %>
-                        <span class="label label-info"><%= dimensiones %></span>
-                        <% } %>
-                    </div>
-                </div>
+                <% if ((!_.isUndefined(forma)) && (forma != '')) { %>
+                    <p><span class="label label-info"><%= forma %></span></p>
+                    <% } %>
+                <% if ((!_.isUndefined(material)) && (material != '')){ %>
+                    <p><span class="label label-info"><%= material %></span></p>
+                    <% } %>
+                <% if ((!_.isUndefined(volumen)) && (volumen != '')) { %>
+                    <p><span class="label label-info"><%= volumen+' litros' %></span></p>
+                    <% } %>
+                <% if ((!_.isUndefined(dimensiones)) && (dimensiones != '')) { %>
+                    <p><span class="label label-info"><%= dimensiones %></span></p>
+                    <% } %>
             </div>
             <% } %>
         </div>
@@ -653,33 +649,33 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="title" class="col-sm-2 control-label">Nombre</label>
+                                <label for="nombre" class="col-sm-2 control-label">Nombre</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="title" placeholder="Nombre" value="<%= nombre %>" autofocus>
+                                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<%= nombre %>" autofocus>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="description" class="col-sm-2 control-label">Forma</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="forma" placeholder="" value=<%= forma %>>
+                                    <input type="text" class="form-control" name="forma" placeholder="Forma del estanque" value="<%= forma %>">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="description" class="col-sm-2 control-label">Material</label>
+                                <label for="material" class="col-sm-2 control-label">Material</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="material" placeholder="Material" value=<%= material %>>
+                                    <input type="text" class="form-control" name="material" placeholder="Material del estanque" value="<%= material %>">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="description" class="col-sm-2 control-label">Volumen</label>
+                                <label for="volumen" class="col-sm-2 control-label">Volumen</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="volumen" placeholder="" value=<%= volumen %>>
+                                    <input type="text" class="form-control" name="volumen" placeholder="Volumen del estanque" value="<%= volumen %>">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="description" class="col-sm-2 control-label">Dimensiones</label>
+                                <label for="dimensiones" class="col-sm-2 control-label">Dimensiones</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="dimensiones" placeholder="" value=<%= dimensiones %>>
+                                    <input type="text" class="form-control" name="dimensiones" placeholder="Dimensiones del estanque" value="<%= dimensiones %>">
                                 </div>
                             </div>
                             <div class="form-group">
