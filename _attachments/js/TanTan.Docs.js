@@ -64,6 +64,7 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
     });
 
     Docs.EstanqueDoc = Backbone.Model.extend({
+        urlRoot: "/estanques",
         defaults: {
             tipo: "estanque",
             nombre: '',
