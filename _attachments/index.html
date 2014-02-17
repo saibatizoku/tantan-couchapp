@@ -128,6 +128,18 @@
                         <% } %>
                 </div>
             </div>
+            <% if (isAdmin()) { %>
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-justified">
+                            <a href="#editar/granjas/<%= _id %>" class="btn btn-warning boton-editar">Editar <span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="#borrar/granjas/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }%>
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h1 class="panel-title">Estanques <%= nombre %></h1>
@@ -201,13 +213,8 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h4>Datos del estanque <%= nombre %></h4>
-                <div class="btn-toolbar">
-                    <div class="btn-group btn-group-justified">
-                        <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-warning boton-editar">Editar <span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
-                    </div>
-                </div>
             </div>
+            <% if (hasInfo()) { %>
             <div class="panel-body">
                 <div class="thumbnail">
                     <div>
@@ -226,7 +233,20 @@
                     </div>
                 </div>
             </div>
+            <% } %>
         </div>
+        <% if (isAdmin()) { %>
+        <div class="panel panel-info">
+            <div class="panel-body">
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-justified">
+                            <a href="#editar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-warning boton-editar">Editar <span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="#borrar/granjas/<%= granja_id %>/estanques/<%= _id %>" class="btn btn-danger boton-borrar">Eliminar <span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <% } %>
         <div id="operaciones" class="panel panel-info">
             <div class="panel-heading">
                 Actividad del estanque <%= nombre %>
