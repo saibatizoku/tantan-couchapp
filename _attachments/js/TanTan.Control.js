@@ -57,6 +57,8 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                                 controller.loggedOut();
                             }
                         });
+                    } else {
+                        controller.loggedOutContent();
                     }
                     controller.showNavBar(user);
                 }
@@ -79,10 +81,10 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
         },
         loggedOut: function () {
             this.showNavBar();
-            this.closeMain();
+            this.loggedOutContent();
         },
-        closeMain: function () {
-            App.main.close();
+        loggedOutContent: function () {
+            App.main.show(new App.Vistas.LoggedOutContent());
         },
         showGranja: function (model, eid) {
             var controller = this;

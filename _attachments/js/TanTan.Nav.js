@@ -108,4 +108,9 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         }
     });
 
+    Vistas.LoggedOutContent = Marionette.ItemView.extend({
+        template: "#template-content-logged-out",
+        className: "row"
+    });
+
 });
