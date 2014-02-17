@@ -115,7 +115,6 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                             data.modified_at = new Date().toISOString();
                         } else {
                             data.created_at = data.modified_at = new Date().toISOString();
-                            data.created_date = dates.today;
                         }
                         args.model.set(data);
                         console.log('saving estanque model', JSON.stringify(args.model.toJSON()));
@@ -151,6 +150,31 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                     link.toggleClass('active');
                 });
             });
+            controller.listenTo(side, 'nuevo:estanque', function (args) {
+                var granja = args.model;
+                var estanx = args.view.collection;
+                var nuevo = new App.Docs.EstanqueDoc({granja_id: args.model.id});
+                console.log('nuevo estanque de granja', args.model.get('nombre'), nuevo.toJSON());
+                var editview = new App.Vistas.EstanqueEdit({model: nuevo});
+                controller.listenTo(editview, 'cerrar:editar', function () {
+                    console.log('cerrando sin guardar');
+                    //showEstanque(editview.model);
+                });
+                controller.listenTo(editview, 'save:form', function (args) {
+                    var data = args.view.ui.form.serializeJSON();
+                    if (args.model.id) {
+                        data.modified_at = new Date().toISOString();
+                    } else {
+                        data.created_at = data.modified_at = new Date().toISOString();
+                    }
+                    args.model.set(data);
+                    console.log('saving estanque model', JSON.stringify(args.model.toJSON()));
+                    args.model.save();
+                    estanx.add(args.model);
+                    args.view.$el.modal('hide');
+                });
+                layout.content.show(editview);
+            });
             controller.listenTo(side, 'editar:granja', function (args) {
                 console.log('editando granja', args.model.toJSON());
                 var editview = new App.Vistas.GranjaEdit({model: args.model});
@@ -164,7 +188,6 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                         data.modified_at = new Date().toISOString();
                     } else {
                         data.created_at = data.modified_at = new Date().toISOString();
-                        data.created_date = dates.today;
                     }
                     args.model.set(data);
                     console.log('saving granja model', JSON.stringify(args.model.toJSON()));

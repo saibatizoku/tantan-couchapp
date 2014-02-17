@@ -21,11 +21,13 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
         itemViewContainer: "#listado-estanques",
         ui: {
             "borrar": ".boton-borrar",
-            "editar": ".boton-editar"
+            "editar": ".boton-editar",
+            "nuevo": ".boton-nuevo"
         },
         triggers: {
             "click @ui.borrar": "borrar:granja",
-            "click @ui.editar": "editar:granja"
+            "click @ui.editar": "editar:granja",
+            "click @ui.nuevo": "nuevo:estanque"
         },
         templateHelpers: {
             isAdmin: function () {
