@@ -134,6 +134,25 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                 controller.listenTo(editview, 'cerrar:editar', function () {
                     controller.showGranja(editview.model);
                 });
+                controller.listenTo(editview, 'save:form', function (args) {
+                    console.log('guardando datos de granja', args);
+                    var data = args.view.ui.form.serializeJSON();
+                    if (args.model.id) {
+                        data.modified_at = new Date().toISOString();
+                    } else {
+                        data.created_at = data.modified_at = new Date().toISOString();
+                        data.created_date = dates.today;
+                    }
+                    args.model.set(data);
+                    console.log('saving granja model', JSON.stringify(args.model.toJSON()));
+                    args.model.save({
+                        success: function (m, r, o) {
+                            console.log('granja guardada', m.toJSON());
+                            controller.showGranja(editview.model);
+                        }
+                    });
+                    args.view.$el.modal('hide');
+                });
                 layout.content.show(editview);
             });
             layout.side.show(side);

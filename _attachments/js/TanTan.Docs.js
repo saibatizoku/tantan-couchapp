@@ -42,6 +42,7 @@ TanTan.module('Docs', function (Docs, App, Backbone, Marionette, $, _) {
     });
 
     Docs.GranjaDoc = Backbone.Model.extend({
+        urlRoot: "/granjas",
         defaults: {
             tipo: 'granja',
             nombre: '',

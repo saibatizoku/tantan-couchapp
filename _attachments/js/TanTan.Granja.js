@@ -53,6 +53,13 @@ TanTan.module('Vistas', function (Vistas, App, Backbone, Marionette, $, _) {
             'aria-labelledby': 'modal-formLabel',
             'aria-hidden': 'true'
         },
+        ui: {
+            "save": "button[type=submit]",
+            "form": "form"
+        },
+        triggers: {
+            "click @ui.save": "save:form"
+        },
         onRender: function () {
             var view = this;
             this.$el.modal('show');
