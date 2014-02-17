@@ -140,6 +140,9 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
         },
         showNavBar: function (user) {
             var controller = this;
+            if (!user) {
+                user = new App.Docs.UserDoc();
+            }
             var navbar = new App.Vistas.NavBar({model: user});
             this.listenTo(navbar, "do:login", function (args) {
                 console.log('controller logging in');
