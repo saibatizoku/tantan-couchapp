@@ -64,6 +64,9 @@ TanTan.module('Control', function (Control, App, Backbone, Marionette, $, _) {
                 }
             });
         },
+        getCurrentUser: function () {
+            return App.nav.currentView.model;
+        },
         getUser: function (resp) {
             var controller = this;
             if (resp) {
